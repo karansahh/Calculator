@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calculator</title>
+<style>
+  /* Style for the calculator form */
+  /* Set the width and center the form */
+  form {
+    width: 300px;
+    margin: 0 auto;
+    /* Set font size and alignment */
+    font-size: 16px;
+    text-align: center;
+    /* Set background color, padding, and border radius */
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 5px;
+    /* Add a box shadow effect */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Style for the form labels */
+  label {
+    display: block;
+    margin-bottom: 10px;
+    /* Set font size and text alignment */
+    font-size: 14px;
+    text-align: left;
+  }
+
+  /* Style for number inputs and select dropdown */
+  input[type="number"],
+  select {
+    /* Set the width, padding, font size, and border radius */
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    /* Add a border and bottom margin */
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+
+  /* Style for the calculate button */
+  input[type="button"] {
+    /* Set the padding, background color, font color, font size, border, and border radius */
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    /* Add a cursor pointer and transition effect */
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  /* Style for the calculate button when hovered */
+  input[type="button"]:hover {
+    background-color: #3e8e41;
+  }
+
+  /* Style for the result heading */
+  h2 {
+    /* Set the text alignment and font size */
+    text-align: center;
+    font-size: 24px;
+    /* Add a top margin */
+    margin-top: 30px;
+  }
+
+  /* Style for the result */
+  #result {
+    /* Set the font size, text alignment, width, padding, border, and border radius */
+    font-size: 36px;
+    text-align: center;
+    width: 300px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    /* Set the background color and add a box shadow effect */
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+  </head>
+  <body>
+    <h1>Calculator</h1>
+    <form>
+      <label for="num1">Number 1:</label>
+      <input type="number" id="num1" name="num1"><br><br>
+      <label for="num2">Number 2:</label>
+      <input type="number" id="num2" name="num2"><br><br>
+      <label for="operator">Operator:</label>
+      <select id="operator" name="operator">
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
+      </select><br><br>
+      <input type="button" value="Calculate" onclick="calculate()">
+    </form>
+    <br>
+    <h2>Result:</h2>
+    <p id="result"></p>
+    
+    <script>
+  // Function to add two numbers
+  function add(a, b, callback) {
+    // Using setTimeout to simulate an asynchronous operation
+    setTimeout(() => {
+      // Callback function called after 1 second with the result of the operation
+      callback(a + b);
+    }, 1000);
+  }
+
+  // Function to subtract two numbers
+  function subtract(a, b, callback) {
+    // Using setTimeout to simulate an asynchronous operation
+    setTimeout(() => {
+      // Callback function called after 1 second with the result of the operation
+      callback(a - b);
+    }, 1000);
+  }
+
+  // Function to multiply two numbers, returns a promise
+  function multiply(a, b) {
+    // Returning a new promise
+    return new Promise((resolve, reject) => {
+      // Using setTimeout to simulate an asynchronous operation
+      setTimeout(() => {
+        // Checking if the input is valid, and resolving or rejecting the promise accordingly
+        if (isNaN(a) || isNaN(b)) {
+          reject("Invalid input");
+        } else {
+          resolve(a * b);
+        }
+      }, 1000);
+    });
+  }
+
+  // Function to divide two numbers, returns a promise
+  function divide(a, b) {
+    // Returning a new promise
+    return new Promise((resolve, reject) => {
+      // Using setTimeout to simulate an asynchronous operation
+      setTimeout(() => {
+        // Checking if the input is valid, and resolving or rejecting the promise accordingly
+        if (b === 0 || isNaN(a) || isNaN(b)) {
+          reject("Invalid input");
+        } else {
+          resolve(a / b);
+        }
+      }, 1000);
+    });
+  }
+
+  // Function to handle the calculation
+  function calculate() {
+    // Getting the input values and operator from the form
+    const num1 = parseFloat(document.getElementById("num1").value);
+    const num2 = parseFloat(document.getElementById("num2").value);
+    const operator = document.getElementById("operator").value;
+    // Getting the element where the result will be displayed
+    const resultElement = document.getElementById("result");
+
+    // Performing the operation based on the operator selected
+    switch (operator) {
+      // If the operator is +, call the add function with a callback function to update the result
+      case "+":
+        add(num1, num2, (result) => {
+          resultElement.innerHTML = result;
+        });
+        break;
+      // If the operator is -, call the subtract function with a callback function to update the result
+      case "-":
+        subtract(num1, num2, (result) => {
+          resultElement.innerHTML = result;
+        });
+        break;
+      // If the operator is *, call the multiply function and update the result using a promise
+      case "*":
+        multiply(num1, num2)
+          .then((result) => {
+            resultElement.innerHTML = result;
+          })
+          .catch((error) => {
+            resultElement.innerHTML = error;
+          });
+        break;
+      // If the operator is /, call the divide function and update the result using a promise
+      case "/":
+        divide(num1, num2)
+          .then((result) => {
+            resultElement.innerHTML = result;
+          })
+          .catch((error) => {
+            resultElement.innerHTML = error;
+          });
+        break;
+      // If the operator is not valid, display an error message
+      default:
+        resultElement.innerHTML = "Invalid operator";
+        break;
+    }
+  }
+</script>
+
+  </body>
+</html>
